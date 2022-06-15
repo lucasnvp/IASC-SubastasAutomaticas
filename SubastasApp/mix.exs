@@ -39,6 +39,8 @@ defmodule SubastasApp.Mixfile do
       {:jason, "~> 1.0"},
       {:plug, "~> 1.13"},
       {:plug_cowboy, "~> 2.5"},
+      {:memento, "~> 0.3"},
+      {:libcluster, "~> 3.0"},
     ]
   end
 end
