@@ -7,5 +7,7 @@ defmodule SubastasAppWeb.Router do
 
   scope "/api", SubastasAppWeb do
     pipe_through :api
+
+    post "/buyers", BuyerController, :create
   end
 end
