@@ -9,14 +9,14 @@ all: help
 help: Makefile
 	@sed -n 's/^##//p' $<
 
-## docker-build: Build SubastaApp image
-docker-build:
+## build: Build SubastaApp image
+build:
 	docker build -t $(NAME):$(VERSION) -f Dockerfile .
 
-## run-bash: Attach shell to SubastaApp container
-run-bash:
+## shell: Attach shell to SubastaApp container
+shell:
 	docker exec --rm -ti $(NAME):$(VERSION) bash
 
-## run-server: Bootstrap SubastaApp container
-run-server:
+## run: Bootstrap SubastaApp server container
+run:
 	docker run -p 4000:4000 --rm -ti $(NAME):$(VERSION) mix phx.server
