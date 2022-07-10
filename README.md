@@ -6,4 +6,4 @@ Implementacion de  Arquitecturas de Software Concurrentes
 ` curl -d 'name=usertest&ip=10.0.0.1&tags=[decoracion, iluminacion]' -X POST http://localhost:4000/api/buyers `
 
 #### Bids
-` curl -d 'name=usertest' -X POST http://localhost:4000/api/bids `
+` curl -d 'tags=[decoracion, iluminacion]&defaultPrice=10&duration=100&item=lampara' -X POST http://localhost:4000/api/bids `

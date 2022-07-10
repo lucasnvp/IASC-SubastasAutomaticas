@@ -9,6 +9,7 @@ defmodule SubastasApp.Application do
     # Setup Memento
     Memento.start()
     Memento.Table.create!(SubastasAppWeb.BuyerController)
+    Memento.Table.create!(SubastasAppWeb.BidController)
 
     # Define workers and child supervisors to be supervised
     children = [
