@@ -18,4 +18,19 @@ defmodule SubastasAppWeb.BuyerController do
     |> put_status(200)
     |> text("Comprador registrado")
   end
+
+  def readDB(conn, _params) do
+    # Read all records
+    Memento.transaction fn ->
+      resultado = Memento.Query.all(SubastasAppWeb.BuyerController)
+
+      resultado_map = resultado
+        |> Enum.map(fn(item) -> Map.from_struct(item) end)
+
+      conn
+      |> put_status(200)
+      |> json(List.first(resultado_map))
+    end
+  end
+
 end

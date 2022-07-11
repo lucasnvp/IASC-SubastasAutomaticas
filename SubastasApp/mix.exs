@@ -41,6 +41,7 @@ defmodule SubastasApp.Mixfile do
       {:plug_cowboy, "~> 2.5"},
       {:memento, "~> 0.3"},
       {:libcluster, "~> 3.0"},
+      {:poison, "~> 5.0"}
     ]
   end
 end
