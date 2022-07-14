@@ -28,3 +28,5 @@ import_config "#{Mix.env}.exs"
 # Configure mnesia
 config :mnesia,
        dir: '.mnesia/#{Mix.env}/#{node()}'
+
+config :phoenix, :json_library, Poison
