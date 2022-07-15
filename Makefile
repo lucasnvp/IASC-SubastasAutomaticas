@@ -19,4 +19,4 @@ shell:
 
 ## run: Bootstrap SubastaApp server container
 run:
-	docker run -p 4000:4000 --rm -ti $(NAME):$(VERSION) mix phx.server
+	docker run -p 4000:4000 --rm -ti $(NAME):$(VERSION) iex -S mix phx.server
