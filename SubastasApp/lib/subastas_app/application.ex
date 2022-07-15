@@ -6,6 +6,11 @@ defmodule SubastasApp.Application do
   def start(_type, _args) do
     import Supervisor.Spec
 
+    # Setup Memento
+    Memento.start()
+    Memento.Table.create!(SubastasAppWeb.Buyer)
+    Memento.Table.create!(SubastasAppWeb.Bid)
+
     # Define workers and child supervisors to be supervised
     children = [
       # Start the endpoint when the application starts
