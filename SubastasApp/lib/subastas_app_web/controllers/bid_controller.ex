@@ -1,12 +1,13 @@
 defmodule SubastasAppWeb.BidController do
   use SubastasAppWeb, :controller
+  alias SubastasAppWeb.Bid
 
   def create(conn, %{"tags" => tags, "defaultPrice" => defaultPrice, "duration" => duration, "item" => item}) do
     IO.puts "Buyer #{item} - init"
 
     # Write a record
     operation = fn ->
-      Memento.Query.write(%SBid{tags: tags, defaultPrice: defaultPrice, duration: duration, item: item})
+      Memento.Query.write(%Bid{tags: tags, defaultPrice: defaultPrice, duration: duration, item: item})
     end
     Memento.Transaction.execute_sync(operation, 5)
 
