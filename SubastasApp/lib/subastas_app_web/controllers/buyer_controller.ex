@@ -1,13 +1,12 @@
 defmodule SubastasAppWeb.BuyerController do
   use SubastasAppWeb, :controller
-  alias SubastasAppWeb.Buyer
 
   def create(conn, %{"name" => name, "ip" => ip, "tags" => tags}) do
     IO.puts "Buyer #{name} - init"
 
     # Write a record
     operation = fn ->
-      Memento.Query.write(%Buyer{name: name, ip: ip, tags: tags})
+      Memento.Query.write(%SubastasAppWeb.Buyer{name: name, ip: ip, tags: tags})
     end
     Memento.Transaction.execute_sync(operation, 5)
 
@@ -29,7 +28,7 @@ defmodule SubastasAppWeb.BuyerController do
 
   def get_buyers(conn, %{}) do
     buyers = Memento.transaction! fn ->
-      Memento.Query.all(Buyer)
+      Memento.Query.all(SubastasAppWeb.Buyer)
     end
     IO.inspect buyers, label: "The buyers is"
 
