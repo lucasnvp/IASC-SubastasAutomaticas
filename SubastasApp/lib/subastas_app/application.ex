@@ -4,8 +4,6 @@ defmodule SubastasApp.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   def start(_type, _args) do
-    import Supervisor.Spec
-
     # Setup Memento
     Memento.start()
     Memento.Table.create!(SubastasAppWeb.Buyer)
@@ -14,7 +12,7 @@ defmodule SubastasApp.Application do
     # Define workers and child supervisors to be supervised
     children = [
       # Start the endpoint when the application starts
-      supervisor(SubastasAppWeb.Endpoint, []),
+      SubastasAppWeb.Endpoint,
       # Start your own worker by calling: SubastasApp.Worker.start_link(arg1, arg2, arg3)
       # worker(SubastasApp.Worker, [arg1, arg2, arg3]),
     ]
