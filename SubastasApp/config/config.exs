@@ -3,15 +3,14 @@
 #
 # This configuration file is loaded before any dependency and
 # is restricted to this project.
-use Mix.Config
+import Config
 
 # Configures the endpoint
 config :subastas_app, SubastasAppWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "0zg0PizQBbivQKbsEu5TTF2/eoOWsa1FVHzVbbZ5iUjFOwloa6zYhdUJxym4ZoTZ",
   render_errors: [view: SubastasAppWeb.ErrorView, accepts: ~w(json)],
-  pubsub: [name: SubastasApp.PubSub,
-           adapter: Phoenix.PubSub.PG2]
+  pubsub_server: SubastasApp.PubSub
 
 # Configures Elixir's Logger
 config :logger, :console,

@@ -4,19 +4,28 @@ defmodule SubastasApp.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   def start(_type, _args) do
-    import Supervisor.Spec
-
     # Setup Memento
     Memento.start()
     Memento.Table.create!(SubastasAppWeb.Buyer)
     Memento.Table.create!(SubastasAppWeb.Bid)
 
+    topologies = [
+      SubastasApp: [
+        strategy: Cluster.Strategy.Epmd,
+        config: [
+          hosts: get_cluster_hosts()
+        ]
+      ]
+    ]
+
     # Define workers and child supervisors to be supervised
     children = [
+      {Cluster.Supervisor, [topologies, [name: SubastasApp.ClusterSupervisor]]},
       # Start the endpoint when the application starts
-      supervisor(SubastasAppWeb.Endpoint, []),
+      SubastasAppWeb.Endpoint,
       # Start your own worker by calling: SubastasApp.Worker.start_link(arg1, arg2, arg3)
       # worker(SubastasApp.Worker, [arg1, arg2, arg3]),
+      {Phoenix.PubSub, [name: SubastasApp.PubSub, adapter: Phoenix.PubSub.PG2]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
@@ -30,5 +39,26 @@ defmodule SubastasApp.Application do
   def config_change(changed, _new, removed) do
     SubastasAppWeb.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  defp get_cluster_hosts() do
+    case :inet.gethostbyname(:app) do
+      {:ok, {:hostent, 'app', [], :inet, 4, hosts_ip}} ->
+        Enum.map(hosts_ip, fn ip ->
+          {:ok, {:hostent, hostname, [], :inet, 4, _ips}} = :inet.gethostbyaddr(ip)
+
+          String.to_atom("node@" <> normalize_hostname(hostname))
+        end)
+
+      error ->
+        raise "Unexpected #{inspect(error)}"
+    end
+  end
+
+  defp normalize_hostname(hostname) do
+    hostname
+    |> to_string()
+    |> String.split(".subastas-net")
+    |> List.first()
   end
 end
