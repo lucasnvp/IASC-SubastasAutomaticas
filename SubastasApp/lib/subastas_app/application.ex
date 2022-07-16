@@ -12,6 +12,9 @@ defmodule SubastasApp.Application do
     topologies = [
       SubastasApp: [
         strategy: Cluster.Strategy.Epmd,
+        config: [
+          hosts: get_cluster_hosts()
+        ]
       ]
     ]
 
@@ -36,5 +39,26 @@ defmodule SubastasApp.Application do
   def config_change(changed, _new, removed) do
     SubastasAppWeb.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  defp get_cluster_hosts() do
+    case :inet.gethostbyname(:app) do
+      {:ok, {:hostent, 'app', [], :inet, 4, hosts_ip}} ->
+        Enum.map(hosts_ip, fn ip ->
+          {:ok, {:hostent, hostname, [], :inet, 4, _ips}} = :inet.gethostbyaddr(ip)
+
+          String.to_atom("node@" <> normalize_hostname(hostname))
+        end)
+
+      error ->
+        raise "Unexpected #{inspect(error)}"
+    end
+  end
+
+  defp normalize_hostname(hostname) do
+    hostname
+    |> to_string()
+    |> String.split(".subastas-net")
+    |> List.first()
   end
 end
