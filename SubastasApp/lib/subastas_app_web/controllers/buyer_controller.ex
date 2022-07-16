@@ -1,6 +1,7 @@
 defmodule SubastasAppWeb.BuyerController do
   use SubastasAppWeb, :controller
   alias SubastasAppWeb.Buyer
+  alias SubastasAppWeb.Bid
 
   def create(conn, %{"name" => name, "ip" => ip, "tags" => tags}) do
     IO.puts "Buyer #{name} - init"
@@ -20,7 +21,17 @@ defmodule SubastasAppWeb.BuyerController do
     IO.puts "Oferta realizada"
     IO.puts "Id: #{id} - Price: #{price}"
 
-#    todo
+    bids = Memento.transaction! fn ->
+      Memento.Query.all(Bid)
+    end
+    IO.inspect bids, label: "The bids are"
+
+#    time = NaiveDateTime.utc_now
+    bid = Memento.transaction! fn ->
+#      Memento.Query.read(Bid, Integer.parse(id))
+      Memento.Query.read(Bid, id)
+    end
+    IO.puts "Bid: #{bid}"
 
     conn
     |> put_status(200)
