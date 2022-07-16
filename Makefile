@@ -15,8 +15,9 @@ build:
 
 ## shell: Attach shell to SubastaApp container
 shell:
-	docker exec --rm -ti $(NAME):$(VERSION) bash
+	docker exec -ti $(APP) bash
 
-## run: Bootstrap SubastaApp server container
+## run: Bootstrap SubastaApp server container inside subastas-net docker network
 run:
-	docker run -p 4000:4000 --rm -ti $(NAME):$(VERSION) iex -S mix phx.server
+	- docker network create subastas-net
+	- docker run --rm -it --net subastas-net --net-alias app --hostname $(APP) --name $(APP) $(NAME):$(VERSION) iex --cookie cookie --sname node@$(APP) -S mix phx.server
