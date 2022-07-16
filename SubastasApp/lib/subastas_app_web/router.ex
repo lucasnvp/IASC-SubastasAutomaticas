@@ -13,7 +13,6 @@ defmodule SubastasAppWeb.Router do
     get "/buyers/get", BuyerController, :get_buyers
 
     post "/bids", BidController, :create
-    post "/bids_received", BidController, :bid_received
 
   end
 end
