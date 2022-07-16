@@ -42,7 +42,7 @@ defmodule SubastasAppWeb.BuyerController do
     buyers = Memento.transaction! fn ->
       Memento.Query.all(Buyer)
     end
-    IO.inspect buyers, label: "The buyers is"
+    IO.inspect buyers, label: "The buyers are"
 
     render(conn, "list.json", buyers: buyers)
   end
