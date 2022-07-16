@@ -12,7 +12,6 @@ defmodule SubastasApp.Application do
     topologies = [
       SubastasApp: [
         strategy: Cluster.Strategy.Epmd,
-        config: [hosts: []]
       ]
     ]
 
