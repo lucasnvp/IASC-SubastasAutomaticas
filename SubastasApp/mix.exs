@@ -42,6 +42,7 @@ defmodule SubastasApp.Mixfile do
       {:memento, "~> 0.3"},
       {:libcluster, "~> 3.0"},
       {:poison, "~> 5.0"},
+      {:httpoison, "~> 1.8"},
     ]
   end
 end

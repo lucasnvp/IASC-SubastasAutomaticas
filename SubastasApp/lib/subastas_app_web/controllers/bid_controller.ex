@@ -12,11 +12,14 @@ defmodule SubastasAppWeb.BidController do
     end
     Memento.Transaction.execute_sync(operation, 5)
 
+#    todo filtrar por intereses
     buyers = Memento.transaction! fn ->
       Memento.Query.all(Buyer)
     end
-    IO.inspect buyers, label: "The buyers are"
-#    todo enviar a todos los compradores
+#    IO.inspect buyers, label: "The buyers are"
+#    todo enviar a todos los compradores wip
+    url = "http://localhost:4000/api/buyers/bid_notifier"
+    {:noreply, response} = HTTPoison.post url, "{\"body\": \"test\"}", [{"Content-Type", "application/json"}]
 
     conn
     |> put_status(200)

@@ -8,6 +8,7 @@ defmodule SubastasApp.Application do
     Memento.start()
     Memento.Table.create!(SubastasAppWeb.Buyer)
     Memento.Table.create!(SubastasAppWeb.Bid)
+    Memento.Table.create!(SubastasAppWeb.Bids)
 
     topologies = [
       SubastasApp: [
