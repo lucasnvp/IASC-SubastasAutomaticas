@@ -1,17 +1,11 @@
 defmodule SubastasAppWeb.BuyerController do
   use SubastasAppWeb, :controller
-  alias SubastasAppWeb.Buyer
-  alias SubastasAppWeb.Bid
-  alias SubastasAppWeb.Bids
+  alias SubastasAppWeb.BuyerModel
+  alias SubastasAppWeb.BidSubmissionModel
 
   def create(conn, %{"name" => name, "ip" => ip, "tags" => tags}) do
-    IO.puts "Buyer #{name} - init"
-
-    # Write a record
-    operation = fn ->
-      Memento.Query.write(%Buyer{name: name, ip: ip, tags: tags})
-    end
-    Memento.Transaction.execute_sync(operation, 5)
+    id = UUID.uuid4()
+    SubastasApp.BuyerSupervisor.add_buyer(id, name, ip, tags)
 
     conn
     |> put_status(200)
@@ -30,7 +24,7 @@ defmodule SubastasAppWeb.BuyerController do
 
     # Write a record
     operation = fn ->
-      Memento.Query.write(%Bids{
+      Memento.Query.write(%BidSubmissionModel {
         user_id: userId,
         bid_id: bidId,
         price: price,
@@ -39,8 +33,6 @@ defmodule SubastasAppWeb.BuyerController do
     end
     Memento.Transaction.execute_sync(operation, 5)
 
-
-
     conn
     |> put_status(200)
     |> text("Bid realizada")
@@ -48,7 +40,7 @@ defmodule SubastasAppWeb.BuyerController do
 
   def get_buyers(conn, %{}) do
     buyers = Memento.transaction! fn ->
-      Memento.Query.all(Buyer)
+      Memento.Query.all(BuyerModel)
     end
     IO.inspect buyers, label: "The buyers are"
 

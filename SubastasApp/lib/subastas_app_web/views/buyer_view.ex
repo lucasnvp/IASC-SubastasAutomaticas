@@ -10,5 +10,4 @@ defmodule SubastasAppWeb.BuyerView do
       ip: buyer.ip,
       tags: buyer.tags}
   end
-  
 end
