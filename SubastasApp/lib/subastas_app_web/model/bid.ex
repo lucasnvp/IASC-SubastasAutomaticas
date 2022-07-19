@@ -1,7 +1,7 @@
-defmodule SubastasAppWeb.Bid do
+defmodule SubastasAppWeb.BidModel do
   use Memento.Table,
-      attributes: [:id, :tags, :defaultPrice, :duration, :item],
+      attributes: [:id, :pid, :timestamp, :tags, :defaultPrice, :duration, :item],
       type: :ordered_set,
       autoincrement: true
-  
+
 end

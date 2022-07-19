@@ -6,9 +6,9 @@ defmodule SubastasApp.Application do
   def start(_type, _args) do
     # Setup Memento
     Memento.start()
-    Memento.Table.create!(SubastasAppWeb.Buyer)
-    Memento.Table.create!(SubastasAppWeb.Bid)
-    Memento.Table.create!(SubastasAppWeb.Bids)
+    Memento.Table.create!(SubastasAppWeb.BuyerModel)
+    Memento.Table.create!(SubastasAppWeb.BidModel)
+    Memento.Table.create!(SubastasAppWeb.BidSubmissionModel)
 
     topologies = [
       SubastasApp: [
