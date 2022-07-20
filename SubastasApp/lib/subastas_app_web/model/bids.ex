@@ -1,4 +1,4 @@
-defmodule SubastasAppWeb.Bids do
+defmodule SubastasAppWeb.BidSubmissionModel do
   use Memento.Table,
       attributes: [:id, :user_id, :bid_id, :price, :ts],
       type: :ordered_set,
