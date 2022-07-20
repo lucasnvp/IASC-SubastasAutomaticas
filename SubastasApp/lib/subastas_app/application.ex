@@ -32,11 +32,11 @@ defmodule SubastasApp.Application do
       {Cluster.Supervisor, [topologies, [name: SubastasApp.ClusterSupervisor]]},
       # Start the endpoint when the application starts
       SubastasAppWeb.Endpoint,
-      %{id: SubastasApp.BidSupervisor, start: {SubastasApp.BidSupervisor, :start_link, [[]]} },
-      %{id: SubastasApp.BuyerSupervisor, start: {SubastasApp.BuyerSupervisor, :start_link, [[]]} },
+      SubastasApp.HordeRegistry,
+      SubastasApp.HordeSupervisor,
       # Start your own worker by calling: SubastasApp.Worker.start_link(arg1, arg2, arg3)
       # worker(SubastasApp.Worker, [arg1, arg2, arg3]),
-      {Phoenix.PubSub, [name: SubastasApp.PubSub, adapter: Phoenix.PubSub.PG2]}
+      {Phoenix.PubSub, [name: SubastasApp.PubSub, adapter: Phoenix.PubSub.PG2]},
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

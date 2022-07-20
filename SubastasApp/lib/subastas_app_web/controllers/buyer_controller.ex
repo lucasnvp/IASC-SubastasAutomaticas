@@ -5,7 +5,7 @@ defmodule SubastasAppWeb.BuyerController do
 
   def create(conn, %{"name" => name, "ip" => ip, "tags" => tags}) do
     id = UUID.uuid4()
-    SubastasApp.BuyerSupervisor.add_buyer(id, name, ip, tags)
+    SubastasApp.HordeSupervisor.add_buyer(id, name, ip, tags)
 
     conn
     |> put_status(200)

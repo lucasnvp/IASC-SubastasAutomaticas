@@ -3,7 +3,7 @@ defmodule SubastasAppWeb.BidController do
 
   def create(conn, %{"tags" => tags, "defaultPrice" => defaultPrice, "duration" => duration, "item" => item}) do
     id = UUID.uuid4()
-    SubastasApp.BidSupervisor.add_bid(id, defaultPrice, duration, tags, item)
+    SubastasApp.HordeSupervisor.add_bid(id, defaultPrice, duration, tags, item)
 
     conn
     |> put_status(200)

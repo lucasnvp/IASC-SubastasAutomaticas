@@ -43,7 +43,8 @@ defmodule SubastasApp.Mixfile do
       {:libcluster, "~> 3.0"},
       {:poison, "~> 5.0"},
       {:httpoison, "~> 1.8"},
-      { :uuid, "~> 1.1" },
+      {:uuid, "~> 1.1" },
+      {:horde, "~> 0.8.7"},
     ]
   end
 end
