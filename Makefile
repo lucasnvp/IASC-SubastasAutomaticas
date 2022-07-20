@@ -20,4 +20,4 @@ shell:
 ## run: Bootstrap SubastaApp server container inside subastas-net docker network
 run:
 	- docker network create subastas-net
-	- docker run --rm -it -p $(PORT):4000 --net subastas-net --net-alias app --hostname $(APP) --name $(APP) $(NAME):$(VERSION) iex --cookie cookie --sname node@$(APP) -S mix phx.server
+	- docker run --rm -it -v $$XAUTHORITY:/root/.Xauthority -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=$$DISPLAY -p $(PORT):4000 --net subastas-net --net-alias app --hostname $(APP) --name $(APP) $(NAME):$(VERSION) iex --cookie cookie --sname node@$(APP) -S mix phx.server
