@@ -26,7 +26,9 @@ defmodule SubastasApp.Bid do
     end
 
     IO.inspect buyers, label: "The buyers are"
-    Enum.each(buyers, fn { :id, pid, :timestamp, :id, :name, :ip, :tags } -> GenServer.cast(pid, {:new_bid, self()}) end)
+    Enum.each(buyers, fn buyer ->
+      GenServer.cast(buyer.pid, {:new_bid, self()})
+    end)
 
     {:ok, %{:id => id, :tags => tags, :defaultPrice => defaultPrice, :duration => duration, :item => item}}
   end
