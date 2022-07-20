@@ -24,7 +24,7 @@ defmodule SubastasApp.Buyer do
   def handle_cast({:new_bid, bid}, state) do
     IO.inspect state, label: "Buyer notifies new bid to endpoint"
     url = "http://localhost:4000/api/#{state[:id]}/new_bid"
-    HTTPoison.post url, Jason.encode(bid), [{"Content-Type", "application/json"}]
+    # HTTPoison.post url, "New bid #{bid.id}"
     {:noreply, state}
   end
 end
