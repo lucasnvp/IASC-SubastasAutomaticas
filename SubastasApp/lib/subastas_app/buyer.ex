@@ -2,12 +2,12 @@ defmodule SubastasApp.Buyer do
   use GenServer
   alias SubastasAppWeb.BuyerModel
 
-  def start_link(state) do
-    GenServer.start_link(__MODULE__, state)
+  def start_link({id, name, ip, tags}) do
+    GenServer.start_link(__MODULE__, {id, name, ip, tags})
   end
 
   def child_spec({id, name, ip, tags}) do
-    %{id: id, start: {__MODULE__, :start_link, [id, name, ip, tags]}, type: :worker}
+    %{id: id, start: {__MODULE__, :start_link, [{id, name, ip, tags}]}, type: :worker}
   end
 
   def init({id, name, ip, tags}) do

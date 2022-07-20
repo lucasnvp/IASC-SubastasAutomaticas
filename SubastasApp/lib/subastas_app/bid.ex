@@ -8,7 +8,7 @@ defmodule SubastasApp.Bid do
   end
 
   def child_spec({id, defaultPrice, duration, tags, item}) do
-    %{id: id, start: {__MODULE__, :start_link, [id, defaultPrice, duration, tags, item]}, type: :worker}
+    %{id: id, start: {__MODULE__, :start_link, [{id, defaultPrice, duration, tags, item}]}, type: :worker}
   end
 
   def init({id, defaultPrice, duration, tags, item}) do

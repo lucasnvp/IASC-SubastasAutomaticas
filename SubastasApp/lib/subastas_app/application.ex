@@ -14,7 +14,7 @@ defmodule SubastasApp.Application do
       SubastasApp: [
         strategy: Cluster.Strategy.Epmd,
         config: [
-          hosts: get_cluster_hosts()
+          hosts: []
         ]
       ]
     ]

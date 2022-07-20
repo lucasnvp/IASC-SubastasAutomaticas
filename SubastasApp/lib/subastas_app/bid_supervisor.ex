@@ -12,7 +12,7 @@ defmodule SubastasApp.BidSupervisor do
   def add_bid(id, defaultPrice, duration, tags, item) do
     IO.puts "********* start_child Bid.Supervisor *********"
 
-    spec = SubastasApp.Bid.child_spec({id, defaultPrice, duration, tags, item})
+    spec = {SubastasApp.Bid, {id, defaultPrice, duration, tags, item}}
     DynamicSupervisor.start_child(__MODULE__, spec)
   end
 end
