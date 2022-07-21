@@ -12,6 +12,9 @@ defmodule SubastasApp.Application do
 
     if (length(other_nodes) > 0) do
       Memento.add_nodes(other_nodes)
+      Memento.Table.create_copy(SubastasAppWeb.BuyerModel, node(), :ram_copies)
+      Memento.Table.create_copy(SubastasAppWeb.BidModel, node(), :ram_copies)
+      Memento.Table.create_copy(SubastasAppWeb.BidSubmissionModel, node(), :ram_copies)
     else
       Memento.Table.create!(SubastasAppWeb.BuyerModel)
       Memento.Table.create!(SubastasAppWeb.BidModel)
