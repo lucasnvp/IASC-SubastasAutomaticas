@@ -32,6 +32,7 @@ defmodule SubastasApp.Application do
       {Cluster.Supervisor, [topologies, [name: SubastasApp.ClusterSupervisor]]},
       # Start the endpoint when the application starts
       SubastasAppWeb.Endpoint,
+      SubastasApp.BuyerNotifier,
       SubastasApp.HordeRegistry,
       SubastasApp.HordeSupervisor,
       # Start your own worker by calling: SubastasApp.Worker.start_link(arg1, arg2, arg3)
@@ -43,6 +44,7 @@ defmodule SubastasApp.Application do
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: SubastasApp.Supervisor]
     Supervisor.start_link(children, opts)
+
   end
 
   # Tell Phoenix to update the endpoint configuration

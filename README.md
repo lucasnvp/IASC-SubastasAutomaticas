@@ -18,10 +18,12 @@ Implementacion de  Arquitecturas de Software Concurrentes
 
 `conn = Phoenix.ConnTest.build_conn()`
 
-`SubastasAppWeb.BuyerController.create(conn, %{"name" => "usertest", "ip" => "10.0.0.1", "tags" => "[decoracion, iluminacion]"})`
+`SubastasAppWeb.BuyerController.create(conn, %{"name" => "usertestA", "ip" => "10.0.0.1", "tags" => "[decoracion, iluminacion]"})`
+
+`SubastasAppWeb.BuyerController.create(conn, %{"name" => "usertestB", "ip" => "10.0.0.1", "tags" => "[bazar, comida]"})`
 
 `SubastasAppWeb.BuyerController.get_buyers(conn, %{})`
 
-`SubastasAppWeb.BidController.create(conn, %{"tags" => "[decoracion, iluminacion]", "defaultPrice" => "10", "duration" => "100", "item" => "lampara"})`
+`SubastasAppWeb.BidController.create(conn, %{"tags" => "[casa, iluminacion]", "defaultPrice" => "10", "duration" => "100", "item" => "lampara"})`
 
 `SubastasAppWeb.BuyerController.bid(conn, %{"userId" => 1, "bidId" => 1, "price" => "20"})`

@@ -2,6 +2,19 @@ defmodule SubastasApp.Buyer do
   use GenServer
   alias SubastasAppWeb.BuyerModel
 
+  # Buyer Logic
+  def interested_bid? buyer, bid do
+		Enum.any?(buyer[:tags],fn interestedTag -> Enum.member?(bid[:tags], interestedTag) end)
+	end
+
+  def run_if_is_interesting buyer, bid, function do
+		if interested_bid?(buyer, bid) do
+			function.()
+		end
+	end
+
+  # Buyer Server
+
   def start_link({id, name, ip, tags}) do
     GenServer.start_link(__MODULE__, {id, name, ip, tags})
   end

@@ -1,6 +1,5 @@
 defmodule SubastasApp.Bid do
   use GenServer
-  alias SubastasAppWeb.BuyerModel
   alias SubastasAppWeb.BidModel
 
   def start_link(state) do
@@ -14,21 +13,33 @@ defmodule SubastasApp.Bid do
   def init({id, defaultPrice, duration, tags, item}) do
     IO.puts "Bid #{item} - init"
 
+    bid = %{
+      id: id,
+      pid: self(),
+      timestamp: :calendar.universal_time(),
+      tags: tags,
+      defaultPrice: defaultPrice,
+      duration: duration,
+      item: item
+    }
+
     # Write a record
     operation = fn ->
-      Memento.Query.write(%BidModel{id: id, pid: self(), timestamp: :calendar.universal_time(), tags: tags, defaultPrice: defaultPrice, duration: duration, item: item})
+      Memento.Query.write(%BidModel{
+        id: bid.id,
+        pid: bid.pid,
+        timestamp: bid.timestamp,
+        tags: bid.tags,
+        defaultPrice: bid.defaultPrice,
+        duration: bid.duration,
+        item: bid.item
+      })
     end
     Memento.Transaction.execute_sync(operation, 5)
 
-    #todo filtrar por intereses
-    buyers = Memento.transaction! fn ->
-      Memento.Query.all(BuyerModel)
-    end
-
-    IO.inspect buyers, label: "The buyers are"
-    Enum.each(buyers, fn buyer ->
-      GenServer.cast(buyer.pid, {:new_bid, self()})
-    end)
+    notifier = Process.whereis(SubastasApp.BuyerNotifier)
+    IO.inspect notifier, label: "Notifier: "
+    GenServer.cast(notifier,{:notify_new_bid, bid})
 
     {:ok, %{:id => id, :tags => tags, :defaultPrice => defaultPrice, :duration => duration, :item => item}}
   end
