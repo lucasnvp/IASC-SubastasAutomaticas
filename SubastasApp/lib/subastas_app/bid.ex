@@ -39,7 +39,7 @@ defmodule SubastasApp.Bid do
 
     notifier = Process.whereis(SubastasApp.BuyerNotifier)
     IO.inspect notifier, label: "Notifier: "
-    GenServer.cast(notifier,{:notify_new_bid, bid})
+    GenServer.cast(notifier,{:new_bid, bid})
 
     {:ok, %{:id => id, :tags => tags, :defaultPrice => defaultPrice, :duration => duration, :item => item}}
   end
