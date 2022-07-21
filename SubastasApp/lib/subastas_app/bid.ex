@@ -37,6 +37,7 @@ defmodule SubastasApp.Bid do
     end
     Memento.Transaction.execute_sync(operation, 5)
 
+    # Always calls the buyer notifier from the node where the bid was instantiated
     notifier = Process.whereis(SubastasApp.BuyerNotifier)
     IO.inspect notifier, label: "Notifier: "
     GenServer.cast(notifier,{:new_bid, bid})

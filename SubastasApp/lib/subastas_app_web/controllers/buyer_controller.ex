@@ -33,6 +33,10 @@ defmodule SubastasAppWeb.BuyerController do
     end
     Memento.Transaction.execute_sync(operation, 5)
 
+    # Implementacion
+    # encontrar bidPid
+    # GenServer.cast(bidPid, :new_bid_submission, {price, ...})
+
     conn
     |> put_status(200)
     |> text("Bid realizada")
@@ -45,13 +49,5 @@ defmodule SubastasAppWeb.BuyerController do
     IO.inspect buyers, label: "The buyers are"
 
     render(conn, "list.json", buyers: buyers)
-  end
-
-  def bid_notification(conn, %{}) do
-    IO.puts "Nueva oferta realizada"
-
-    conn
-    |> Plug.Conn.send_resp(200, [])
-    |> Plug.Conn.halt()
   end
 end

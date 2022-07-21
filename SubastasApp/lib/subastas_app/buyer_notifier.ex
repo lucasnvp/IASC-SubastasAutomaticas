@@ -17,6 +17,7 @@ defmodule SubastasApp.BuyerNotifier do
 	def getBuyers() do
 		buyers = Memento.transaction! fn ->
       Memento.Query.all(BuyerModel)
+			# Memento.Query.select(Movie, {:==, :title, "Rush"})
     end
 		IO.inspect buyers, label: "The buyers are"
 		buyers

@@ -9,5 +9,4 @@ defmodule SubastasAppWeb.BidController do
     |> put_status(200)
     |> text("Item registrado")
   end
-
 end
