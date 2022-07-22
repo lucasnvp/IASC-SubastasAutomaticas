@@ -14,11 +14,11 @@ make APP=app3 PORT=4003 run
 ## How to test it with CURL
 ### Buyers
 ```bash
-curl -d 'name=usertestA&ip=10.0.0.1&tags=decoracion, iluminacion' -X POST http://localhost:4000/api/buyers 
+curl -d 'name=usertestA&ip=10.0.0.1&tags=decoracion, iluminacion' -X POST http://localhost:4001/api/buyers 
 
-curl -d 'name=usertestB&ip=10.0.0.2&tags=bazar, comida' -X POST http://localhost:4000/api/buyers
+curl -d 'name=usertestB&ip=10.0.0.2&tags=bazar, comida' -X POST http://localhost:4001/api/buyers
 
-curl -d 'name=usertestC&ip=10.0.0.3&tags=decoracion, iluminacion' -X POST http://localhost:4000/api/buyers
+curl -d 'name=usertestC&ip=10.0.0.3&tags=decoracion, iluminacion' -X POST http://localhost:4001/api/buyers
 ```
 
 ` curl -d 'id=1&price=10' -X POST http://localhost:4000/api/buyers_bid `
@@ -52,10 +52,12 @@ curl -d 'name=usertestC&ip=10.0.0.3&tags=decoracion, iluminacion' -X POST http:/
 
 # Get bid id for offers post
 
-`alias SubastasAppWeb.BuyerModel`
+```elixir
+alias SubastasAppWeb.BuyerModel
+Memento.transaction! fn -> Memento.Query.all(BuyerModel) end
+```
 
-`Memento.transaction! fn -> Memento.Query.all(BuyerModel) end`
-
-`alias SubastasAppWeb.BidModel`
-
-`Memento.transaction! fn -> Memento.Query.all(BidModel) end`
+```elixir
+alias SubastasAppWeb.BidModel
+Memento.transaction! fn -> Memento.Query.all(BidModel) end
+```
