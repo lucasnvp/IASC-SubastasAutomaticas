@@ -13,6 +13,7 @@ defmodule SubastasApp.Bid do
 
   def init({id, defaultPrice, duration, tags, item}) do
     Horde.Registry.register(SubastasApp.HordeRegistry, id, {id, defaultPrice, duration, tags, item})
+    Process.send_after(self(), :end_bid, String.to_integer(duration) * 60000)
     IO.puts "Bid #{item} - init"
 
     bid = %{
@@ -89,7 +90,7 @@ defmodule SubastasApp.Bid do
     end
     Memento.Transaction.execute_sync(operation, 5)
 
-    Process.exit(self(), :shutdown)
+    Horde.Registry.unregister(SubastasApp.HordeRegistry, bid.id)
     {:noreply, bid}
   end
 
