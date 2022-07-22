@@ -12,7 +12,7 @@ defmodule SubastasApp.Bid do
   end
 
   def init({id, defaultPrice, duration, tags, item}) do
-    # Process.send_after(self(), :end_bid, duration*1000)
+    Process.send_after(self(), :end_bid, duration*60000)
     Horde.Registry.register(SubastasApp.HordeRegistry, id, {id, defaultPrice, duration, tags, item})
     IO.puts "Bid #{item} - init"
 
@@ -80,12 +80,17 @@ defmodule SubastasApp.Bid do
     {:reply, "Oferta realizada", bid}
   end
 
-  def handle_cast(:end_bid, state) do
+  def handle_cast(:end_bid, bid) do
     notifier = Process.whereis(SubastasApp.BuyerNotifier)
     IO.inspect notifier, label: "Notifier about to notify bid ending: "
-    GenServer.cast(notifier, {:bid_ending, state})
+#    GenServer.cast(notifier, {:bid_ending, bid})
+
+    operation = fn ->
+      Memento.Query.delete(BidModel, bid.id)
+    end
+    Memento.Transaction.execute_sync(operation, 5)
 
     Process.exit(self(), :shutdown)
-    {:noreply, state}
+    {:noreply, bid}
   end
 end
