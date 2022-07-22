@@ -1,7 +1,6 @@
 defmodule SubastasAppWeb.BuyerController do
   use SubastasAppWeb, :controller
   alias SubastasAppWeb.BuyerModel
-  alias SubastasAppWeb.OfferModel
 
   def create(conn, %{"name" => name, "ip" => ip, "tags" => tags_str}) do
     id = UUID.uuid4()

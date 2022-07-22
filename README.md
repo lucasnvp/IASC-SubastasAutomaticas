@@ -9,7 +9,6 @@ make build
 make APP=app1 PORT=4001 run
 make APP=app2 PORT=4002 run
 make APP=app3 PORT=4003 run
-make APP=app4 PORT=4004 run
 ```
 
 ## How to test it with CURL
