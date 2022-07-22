@@ -32,7 +32,7 @@ Implementacion de  Arquitecturas de Software Concurrentes
 
 `SubastasAppWeb.BidController.create(conn, %{"tags" => ["casa", "iluminacion"], "defaultPrice" => "10", "duration" => "100", "item" => "lampara"})`
 
-`SubastasAppWeb.BuyerController.offer(conn, %{"userId" => "8e479976-7024-45d0-b8ea-d6f37d26533e", "bidId" => "48f5977c-dd9d-482a-9e80-a2ff38891cbd", "price" => "20"})`
+`SubastasAppWeb.BuyerController.offer(conn, %{"userId" => "bfcdcf5b-f7ff-4aed-bf75-11a3c7d36974", "bidId" => "9c4e751c-7b2d-44e4-afa3-05c26fb674df", "price" => "20"})`
 
 # Get bid id for offers post
 `alias SubastasAppWeb.BuyerModel`

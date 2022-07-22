@@ -36,17 +36,17 @@ defmodule SubastasApp.Buyer do
     {:noreply, buyer}
   end
 
-  def handle_cast({:new_bid_price, offer}, state) do
-     run_if_is_interesting(buyer,bid,
-			fn ->
-				IO.inspect state, label: "Buyer notifies new bid price to endpoint"
+  def handle_cast({:new_bid_price, offer, bid}, buyer) do
+    run_if_is_interesting(buyer,bid,
+      fn ->
+        IO.inspect buyer, label: "Buyer notifies new bid price to endpoint"
         IO.inspect offer, label: "New offer"
 
         # url = "http://localhost:4000/api/#{state[:id]}/new_bid"
         # HTTPoison.post url, "New bid #{bid.id}"
-			end
-		)
-    {:noreply, state}
+      end
+    )
+    {:noreply, buyer}
   end
 
   def handle_cast({:bid_cancellation, bid}, state) do

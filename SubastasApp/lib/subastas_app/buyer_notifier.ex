@@ -21,9 +21,9 @@ defmodule SubastasApp.BuyerNotifier do
 		{:noreply, state}
 	end
 
-	def handle_cast({:new_bid_price, offer}, state) do
+	def handle_cast({:new_bid_price, offer, bid}, state) do
 		buyers = get_buyers()
-		Enum.each(buyers, fn buyer -> GenServer.cast(buyer.pid, {:new_bid_price, offer}) end)
+		Enum.each(buyers, fn buyer -> GenServer.cast(buyer.pid, {:new_bid_price, offer, bid}) end)
 		{:noreply, state}
 	end
 
