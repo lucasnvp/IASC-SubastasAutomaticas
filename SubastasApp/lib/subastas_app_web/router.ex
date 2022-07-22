@@ -9,11 +9,9 @@ defmodule SubastasAppWeb.Router do
     pipe_through :api
 
     post "/buyers", BuyerController, :create
-    post "/buyers_bid", BuyerController, :bid
-    post "/buyers/bid_notifier", BuyerController, :bid_notification
-    get "/buyers/get", BuyerController, :get_buyers
+    post "/buyers/offer", BuyerController, :offer
+    get "/buyers/", BuyerController, :get_buyers
 
     post "/bids", BidController, :create
-
   end
 end

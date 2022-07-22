@@ -1,7 +1,7 @@
 defmodule SubastasAppWeb.BuyerController do
   use SubastasAppWeb, :controller
   alias SubastasAppWeb.BuyerModel
-  alias SubastasAppWeb.BidSubmissionModel
+  alias SubastasAppWeb.OfferModel
 
   def create(conn, %{"name" => name, "ip" => ip, "tags" => tags}) do
     id = UUID.uuid4()
@@ -12,34 +12,42 @@ defmodule SubastasAppWeb.BuyerController do
     |> text("Comprador registrado")
   end
 
-  def bid(conn, %{"userId" => userId, "bidId" => bidId, "price" => price}) do
-    IO.puts "Oferta realizada from user: #{userId} -Bid: Id: #{bidId} - Price: #{price}"
+  def offer(conn, %{"userId" => user_id, "bidId" => bid_id, "price" => price}) do
+    offer = %{"user_id" => user_id, "bid_id" => bid_id, "price" => price}
+    buyer_pids = Horde.Registry.lookup(SubastasApp.HordeRegistry, user_id)
+    IO.inspect buyer_pids, label: "Buyer pid is"
 
-#    bid = Memento.transaction! fn ->
-#      Memento.Query.read(Bid, String.to_integer(bidId))
-#    end
-#    IO.inspect bid
+    bid_pids = Horde.Registry.lookup(SubastasApp.HordeRegistry, bid_id)
+    IO.inspect bid_pids, label: "Bid pid is"
 
-#    todo   validar los ids
+    if(bid_pids !== []) do
+      if(buyer_pids !== []) do
+        # Write a record
+        operation = fn ->
+          Memento.Query.write(%OfferModel {
+            user_id: user_id,
+            bid_id: bid_id,
+            timestamp: NaiveDateTime.utc_now,
+            price: price,
+          })
+        end
+        Memento.Transaction.execute_sync(operation, 5)
 
-    # Write a record
-    operation = fn ->
-      Memento.Query.write(%BidSubmissionModel {
-        user_id: userId,
-        bid_id: bidId,
-        price: price,
-        ts: NaiveDateTime.utc_now,
-      })
+        bid_pid = bid_pids |> Enum.at(0) |> elem(0)
+        message = GenServer.call(bid_pid, {:new_offer, offer})
+        conn
+        |> put_status(200)
+        |> text(message)
+      else
+        conn
+          |> put_status(200)
+          |> text("Buyer not registered!")
+      end
+    else
+      conn
+        |> put_status(200)
+        |> text("Bid not registered!")
     end
-    Memento.Transaction.execute_sync(operation, 5)
-
-    # Implementacion
-    # encontrar bidPid
-    # GenServer.cast(bidPid, :new_bid_submission, {price, ...})
-
-    conn
-    |> put_status(200)
-    |> text("Bid realizada")
   end
 
   def get_buyers(conn, %{}) do

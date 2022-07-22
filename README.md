@@ -12,7 +12,11 @@ Implementacion de  Arquitecturas de Software Concurrentes
 ` curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X GET http://localhost:4000/api/buyers/get `
 
 ### Bids
-` curl -d 'tags=[decoracion, iluminacion]&defaultPrice=10&duration=100&item=lampara' -X POST http://localhost:4000/api/bids `
+` curl -d 'tags=[decoracion, iluminacion]&defaultPrice=10&duration=100000&item=lampara' -X POST http://localhost:4000/api/bids `
+
+### Offer
+
+` curl -d 'userId=0e4dbc5f-1f90-477f-9e8d-b2d0ec7cc836&bidId=9cf8dfcc-dac3-4c08-9d6b-de1d8bd98c45&price' -X POST http://localhost:4000/api/buyers/offer `
 
 ## How to test it in IEX
 
@@ -26,4 +30,9 @@ Implementacion de  Arquitecturas de Software Concurrentes
 
 `SubastasAppWeb.BidController.create(conn, %{"tags" => "[casa, iluminacion]", "defaultPrice" => "10", "duration" => "100", "item" => "lampara"})`
 
-`SubastasAppWeb.BuyerController.bid(conn, %{"userId" => 1, "bidId" => 1, "price" => "20"})`
+`SubastasAppWeb.BuyerController.offer(conn, %{"userId" => 1, "bidId" => 1, "price" => "20"})`
+
+# Get bid id for offers post
+`Memento.transaction! fn -> Memento.Query.all(BuyerModel) end`
+`Memento.transaction! fn -> Memento.Query.all(BidModel) end`
+

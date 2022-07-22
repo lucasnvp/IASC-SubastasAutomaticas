@@ -14,11 +14,11 @@ defmodule SubastasApp.Application do
       Memento.add_nodes(other_nodes)
       Memento.Table.create_copy(SubastasAppWeb.BuyerModel, node(), :ram_copies)
       Memento.Table.create_copy(SubastasAppWeb.BidModel, node(), :ram_copies)
-      Memento.Table.create_copy(SubastasAppWeb.BidSubmissionModel, node(), :ram_copies)
+      Memento.Table.create_copy(SubastasAppWeb.OfferModel, node(), :ram_copies)
     else
       Memento.Table.create!(SubastasAppWeb.BuyerModel)
       Memento.Table.create!(SubastasAppWeb.BidModel)
-      Memento.Table.create!(SubastasAppWeb.BidSubmissionModel)
+      Memento.Table.create!(SubastasAppWeb.OfferModel)
     end
 
     topologies = [

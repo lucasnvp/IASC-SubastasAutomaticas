@@ -2,19 +2,7 @@ defmodule SubastasApp.Buyer do
   use GenServer
   alias SubastasAppWeb.BuyerModel
 
-  # Buyer Logic
-  def interested_bid? buyer, bid do
-		Enum.any?(buyer[:tags],fn interestedTag -> Enum.member?(bid[:tags], interestedTag) end)
-	end
-
-  def run_if_is_interesting buyer, bid, function do
-		if interested_bid?(buyer, bid) do
-			function.()
-		end
-	end
-
   # Buyer Server
-
   def start_link({id, name, ip, tags}) do
     GenServer.start_link(__MODULE__, {id, name, ip, tags})
   end
@@ -24,6 +12,7 @@ defmodule SubastasApp.Buyer do
   end
 
   def init({id, name, ip, tags}) do
+    Horde.Registry.register(SubastasApp.HordeRegistry, id, {id, name, ip, tags})
     IO.puts "Buyer #{name} - init"
 
     operation = fn ->
@@ -36,6 +25,38 @@ defmodule SubastasApp.Buyer do
 
   def handle_cast({:new_bid, bid}, state) do
     IO.inspect state, label: "Buyer notifies new bid to endpoint"
+    IO.inspect bid, label: "Bid"
+    # url = "http://localhost:4000/api/#{state[:id]}/new_bid"
+    # HTTPoison.post url, "New bid #{bid.id}"
+    {:noreply, state}
+  end
+
+  def handle_cast({:new_bid_price, max_offer}, state) do
+    IO.inspect state, label: "Buyer notifies new bid price to endpoint"
+    IO.inspect max_offer, label: "Max offer"
+    # url = "http://localhost:4000/api/#{state[:id]}/new_bid"
+    # HTTPoison.post url, "New bid #{bid.id}"
+    {:noreply, state}
+  end
+
+  def handle_cast({:bid_cancellation, bid}, state) do
+    IO.inspect state, label: "Buyer notifies bid cancellation to endpoint"
+    IO.inspect bid, label: "Bid"
+    # url = "http://localhost:4000/api/#{state[:id]}/new_bid"
+    # HTTPoison.post url, "New bid #{bid.id}"
+    {:noreply, state}
+  end
+
+  def handle_cast({:bid_ending_lost, bid}, state) do
+    IO.inspect state, label: "Buyer notifies bid ending to endpoint (LOST)"
+    IO.inspect bid, label: "Bid"
+    # url = "http://localhost:4000/api/#{state[:id]}/new_bid"
+    # HTTPoison.post url, "New bid #{bid.id}"
+    {:noreply, state}
+  end
+
+  def handle_cast({:bid_ending_won, bid}, state) do
+    IO.inspect state, label: "Buyer notifies bid ending to endpoint (WIN)"
     IO.inspect bid, label: "Bid"
     # url = "http://localhost:4000/api/#{state[:id]}/new_bid"
     # HTTPoison.post url, "New bid #{bid.id}"
