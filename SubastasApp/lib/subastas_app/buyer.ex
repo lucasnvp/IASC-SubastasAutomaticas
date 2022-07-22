@@ -23,12 +23,16 @@ defmodule SubastasApp.Buyer do
     {:ok, %{:id => id, :name => name, :ip => ip ,:tags => tags }}
   end
 
-  def handle_cast({:new_bid, bid}, state) do
-    IO.inspect state, label: "Buyer notifies new bid to endpoint"
-    IO.inspect bid, label: "Bid"
+  def handle_cast({:new_bid, bid}, buyer) do
+    run_if_is_interesting(buyer,bid,
+			fn ->
+				IO.puts "New bid #{bid[:id]}"
+        IO.inspect bid, label: "Bid"
+			end
+		)
     # url = "http://localhost:4000/api/#{state[:id]}/new_bid"
     # HTTPoison.post url, "New bid #{bid.id}"
-    {:noreply, state}
+    {:noreply, buyer}
   end
 
   def handle_cast({:new_bid_price, max_offer}, state) do
@@ -62,4 +66,17 @@ defmodule SubastasApp.Buyer do
     # HTTPoison.post url, "New bid #{bid.id}"
     {:noreply, state}
   end
+
+  # Private functions
+  def interested_bid? buyer, bid do
+		Enum.any?(buyer[:tags],fn interestedTag ->
+      Enum.member?(bid[:tags], interestedTag)
+    end)
+	end
+
+	def run_if_is_interesting buyer, bid, function do
+		if interested_bid?(buyer, bid) do
+			function.()
+		end
+	end
 end
