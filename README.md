@@ -28,7 +28,7 @@ curl -d 'name=usertestC&ip=10.0.0.3&tags=decoracion, iluminacion' -X POST http:/
 
 ### Bids
 ```bash
- curl -d 'tags=casa, iluminacion&defaultPrice=10&duration=1&item=lampara' -X POST http://localhost:4000/api/bids
+ curl -d 'tags=casa, iluminacion&defaultPrice=10&duration=5&item=lampara' -X POST http://localhost:4000/api/bids
  ````
 
 ### Offer
@@ -52,8 +52,11 @@ curl -d 'name=usertestC&ip=10.0.0.3&tags=decoracion, iluminacion' -X POST http:/
 `SubastasAppWeb.BuyerController.offer(conn, %{"userId" => "e3fd346f-c980-4100-bb5c-f4cc3d56755d", "bidId" => "4c389489-f788-49ee-8921-53f9132561a6", "price" => "20"})`
 
 # Get bid id for offers post
-`alias SubastasAppWeb.BuyerModel`
-`Memento.transaction! fn -> Memento.Query.all(BuyerModel) end`
-`alias SubastasAppWeb.BidModel`
-`Memento.transaction! fn -> Memento.Query.all(BidModel) end`
 
+`alias SubastasAppWeb.BuyerModel`
+
+`Memento.transaction! fn -> Memento.Query.all(BuyerModel) end`
+
+`alias SubastasAppWeb.BidModel`
+
+`Memento.transaction! fn -> Memento.Query.all(BidModel) end`

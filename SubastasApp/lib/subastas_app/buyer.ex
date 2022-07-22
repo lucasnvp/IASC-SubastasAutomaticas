@@ -62,9 +62,9 @@ defmodule SubastasApp.Buyer do
       fn ->
         IO.inspect bid, label: "Bid"
         if (buyer.id == offer.user_id) do
-          IO.puts "The bid end, you are the win"
+          IO.inspect buyer, label: "The bid end, you are the win"
         else
-          IO.puts "The bid end, you lose"
+          IO.inspect buyer, label: "The bid end, you lose"
         end
       end
     )

@@ -41,7 +41,6 @@ defmodule SubastasApp.Bid do
 
     # Always calls the buyer notifier from the node where the bid was instantiated
     notifier = Process.whereis(SubastasApp.BuyerNotifier)
-    IO.inspect notifier, label: "Notifier about to notify new bid: "
     GenServer.cast(notifier, {:new_bid, bid})
 
     {:ok, %{:id => id, :tags => tags, :defaultPrice => defaultPrice, :duration => duration, :item => item}}
@@ -82,7 +81,6 @@ defmodule SubastasApp.Bid do
 
   def handle_info(:end_bid, bid) do
     notifier = Process.whereis(SubastasApp.BuyerNotifier)
-    IO.inspect notifier, label: "Notifier about to notify bid ending: "
     GenServer.cast(notifier, {:bid_ending, bid})
 
     operation = fn ->
