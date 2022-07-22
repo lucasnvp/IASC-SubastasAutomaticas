@@ -21,7 +21,7 @@ make APP=app4 PORT=4004 run
 ` curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X GET http://localhost:4000/api/buyers/get `
 
 ### Bids
-` curl -d 'tags=decoracion, iluminacion&defaultPrice=10&duration=100000&item=lampara' -X POST http://localhost:4000/api/bids `
+` curl -d 'tags=decoracion, iluminacion&defaultPrice=10&duration=1&item=lampara' -X POST http://localhost:4000/api/bids `
 
 ### Offer
 
