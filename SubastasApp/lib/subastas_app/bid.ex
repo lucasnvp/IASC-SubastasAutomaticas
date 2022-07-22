@@ -14,6 +14,7 @@ defmodule SubastasApp.Bid do
   def init({id, defaultPrice, duration, tags, item}) do
     Genserver.cast(self(), {:init_timer})
     Horde.Registry.register(SubastasApp.HordeRegistry, id, {id, defaultPrice, duration, tags, item})
+    # Process.send_after(self(), :end_bid, String.to_integer(duration) * 60000)
     IO.puts "Bid #{item} - init"
 
     bid = %{
