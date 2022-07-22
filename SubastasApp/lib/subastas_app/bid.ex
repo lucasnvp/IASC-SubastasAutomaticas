@@ -12,8 +12,8 @@ defmodule SubastasApp.Bid do
   end
 
   def init({id, defaultPrice, duration, tags, item}) do
+    Genserver.cast(self(), {:init_timer})
     Horde.Registry.register(SubastasApp.HordeRegistry, id, {id, defaultPrice, duration, tags, item})
-    Process.send_after(self(), :end_bid, 60000)
     IO.puts "Bid #{item} - init"
 
     bid = %{
@@ -93,4 +93,11 @@ defmodule SubastasApp.Bid do
     Process.exit(self(), :shutdown)
     {:noreply, bid}
   end
+
+  def handle_cast({:init_timer}, bid) do
+    IO.puts "Init timer"
+    Process.send_after(self(), :end_bid, 60000)
+    {:noreply, bid}
+  end
+
 end
