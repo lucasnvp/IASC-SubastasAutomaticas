@@ -50,21 +50,37 @@ defmodule SubastasApp.Bid do
   def handle_call({:new_offer, offer}, _from, state) do
     IO.inspect offer, label: "New offer received"
 
+    # Write a record
     operation = fn ->
-      Memento.Query.select(OfferModel, {:==,:bid_id, offer.bid_id})
+      Memento.Query.write(%OfferModel {
+        user_id: offer.user_id,
+        bid_id: offer.bid_id,
+        timestamp: offer.ts,
+        price: offer.price,
+      })
     end
-    offers = Memento.Transaction.execute_sync(operation, 5)
+    Memento.Transaction.execute_sync(operation, 5)
 
-    max_offer = Enum.max_by(offers, fn offer -> offer.price end)
-    if(offer.price <= max_offer.price) do
-      {:reply, "Low offer", state}
-    else
-      notifier = Process.whereis(SubastasApp.BuyerNotifier)
-      IO.inspect notifier, label: "Notifier about to notify new bid price: "
-      GenServer.cast(notifier, {:new_bid_price, max_offer})
+    notifier = Process.whereis(SubastasApp.BuyerNotifier)
+    GenServer.cast(notifier, {:new_bid_price, offer})
 
-      {:reply, "New max offer!", state}
-    end
+    {:reply, "Oferta realizada", state}
+
+#    operation = fn ->
+#      Memento.Query.select(OfferModel, {:==,:bid_id, offer.bid_id})
+#    end
+#    offers = Memento.Transaction.execute_sync(operation, 5)
+
+#    max_offer = Enum.max_by(offers, fn offer -> offer.price end)
+#    if(offer.price <= max_offer.price) do
+#      {:reply, "Low offer", state}
+#    else
+#      notifier = Process.whereis(SubastasApp.BuyerNotifier)
+#      IO.inspect notifier, label: "Notifier about to notify new bid price: "
+#      GenServer.cast(notifier, {:new_bid_price, max_offer})
+#
+#      {:reply, "New max offer!", state}
+#    end
   end
 
   def handle_cast(:end_bid, state) do

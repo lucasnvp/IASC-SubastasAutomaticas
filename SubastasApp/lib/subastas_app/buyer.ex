@@ -28,18 +28,24 @@ defmodule SubastasApp.Buyer do
 			fn ->
 				IO.puts "New bid #{bid[:id]}"
         IO.inspect bid, label: "Bid"
+
+        # url = "http://localhost:4000/api/#{state[:id]}/new_bid"
+        # HTTPoison.post url, "New bid #{bid.id}"
 			end
 		)
-    # url = "http://localhost:4000/api/#{state[:id]}/new_bid"
-    # HTTPoison.post url, "New bid #{bid.id}"
     {:noreply, buyer}
   end
 
-  def handle_cast({:new_bid_price, max_offer}, state) do
-    IO.inspect state, label: "Buyer notifies new bid price to endpoint"
-    IO.inspect max_offer, label: "Max offer"
-    # url = "http://localhost:4000/api/#{state[:id]}/new_bid"
-    # HTTPoison.post url, "New bid #{bid.id}"
+  def handle_cast({:new_bid_price, offer}, state) do
+     run_if_is_interesting(buyer,bid,
+			fn ->
+				IO.inspect state, label: "Buyer notifies new bid price to endpoint"
+        IO.inspect offer, label: "New offer"
+
+        # url = "http://localhost:4000/api/#{state[:id]}/new_bid"
+        # HTTPoison.post url, "New bid #{bid.id}"
+			end
+		)
     {:noreply, state}
   end
 

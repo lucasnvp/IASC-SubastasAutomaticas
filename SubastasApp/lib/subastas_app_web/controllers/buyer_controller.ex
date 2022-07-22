@@ -13,7 +13,13 @@ defmodule SubastasAppWeb.BuyerController do
   end
 
   def offer(conn, %{"userId" => user_id, "bidId" => bid_id, "price" => price}) do
-    offer = %{"user_id" => user_id, "bid_id" => bid_id, "price" => price}
+    offer = %{
+      user_id: user_id,
+      bid_id: bid_id,
+      price: price,
+      ts: :calendar.universal_time()
+    }
+
     buyer_pids = Horde.Registry.lookup(SubastasApp.HordeRegistry, user_id)
     IO.inspect buyer_pids, label: "Buyer pid is"
 
@@ -22,22 +28,21 @@ defmodule SubastasAppWeb.BuyerController do
 
     if(bid_pids !== []) do
       if(buyer_pids !== []) do
-        # Write a record
-        operation = fn ->
-          Memento.Query.write(%OfferModel {
-            user_id: user_id,
-            bid_id: bid_id,
-            timestamp: NaiveDateTime.utc_now,
-            price: price,
-          })
-        end
-        Memento.Transaction.execute_sync(operation, 5)
 
-        bid_pid = bid_pids |> Enum.at(0) |> elem(0)
-        message = GenServer.call(bid_pid, {:new_offer, offer})
-        conn
-        |> put_status(200)
-        |> text(message)
+        # Check price
+        bid_price = bid_pids |> Enum.at(0) |> elem(1) |> elem(1)
+        if (bid_price < offer.price) do
+          bid_pid = bid_pids |> Enum.at(0) |> elem(0)
+          message = GenServer.call(bid_pid, {:new_offer, offer})
+          conn
+          |> put_status(200)
+          |> text(message)
+        else
+          conn
+          |> put_status(200)
+          |> text("Oferta invalida - low price")
+        end
+
       else
         conn
           |> put_status(200)

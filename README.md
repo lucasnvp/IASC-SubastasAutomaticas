@@ -26,13 +26,17 @@ Implementacion de  Arquitecturas de Software Concurrentes
 
 `SubastasAppWeb.BuyerController.create(conn, %{"name" => "usertestB", "ip" => "10.0.0.1", "tags" => ["bazar", "comida"]})`
 
+`SubastasAppWeb.BuyerController.create(conn, %{"name" => "usertestC", "ip" => "10.0.0.1", "tags" => ["decoracion", "iluminacion"]})`
+
 `SubastasAppWeb.BuyerController.get_buyers(conn, %{})`
 
 `SubastasAppWeb.BidController.create(conn, %{"tags" => ["casa", "iluminacion"], "defaultPrice" => "10", "duration" => "100", "item" => "lampara"})`
 
-`SubastasAppWeb.BuyerController.offer(conn, %{"userId" => 1, "bidId" => 1, "price" => "20"})`
+`SubastasAppWeb.BuyerController.offer(conn, %{"userId" => "8e479976-7024-45d0-b8ea-d6f37d26533e", "bidId" => "48f5977c-dd9d-482a-9e80-a2ff38891cbd", "price" => "20"})`
 
 # Get bid id for offers post
+`alias SubastasAppWeb.BuyerModel`
 `Memento.transaction! fn -> Memento.Query.all(BuyerModel) end`
+`alias SubastasAppWeb.BidModel`
 `Memento.transaction! fn -> Memento.Query.all(BidModel) end`
 

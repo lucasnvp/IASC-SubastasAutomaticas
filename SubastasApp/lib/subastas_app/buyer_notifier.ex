@@ -21,16 +21,9 @@ defmodule SubastasApp.BuyerNotifier do
 		{:noreply, state}
 	end
 
-	def handle_cast({:new_bid_price, max_offer}, state) do
-		operation = fn ->
-      Memento.Query.select(OfferModel, [{:==,:bid_id, max_offer.bid_id}, {:!=, :user_id, max_offer.user_id}])
-    end
-    other_buyers_offers = Memento.Transaction.execute_sync(operation, 5)
-
-		Enum.each(other_buyers_offers, fn offer ->
-			{buyer_pid, _} = Horde.Registry.lookup(SubastasApp.HordeRegistry, offer.user_id)
-			GenServer.cast(buyer_pid,{:new_bid_price, max_offer})
-		end)
+	def handle_cast({:new_bid_price, offer}, state) do
+		buyers = get_buyers()
+		Enum.each(buyers, fn buyer -> GenServer.cast(buyer.pid, {:new_bid_price, offer}) end)
 		{:noreply, state}
 	end
 
