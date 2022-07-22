@@ -3,6 +3,15 @@ Implementacion de  Arquitecturas de Software Concurrentes
 
 [Enunciado](https://docs.google.com/document/d/1rOg2TUugXZgx23GhXBzUHakV3vDEkfaT2HLzVKIZ1Q0/edit)
 
+## Start project
+```bash
+make build
+make APP=app1 PORT=4001 run
+make APP=app2 PORT=4002 run
+make APP=app3 PORT=4003 run
+make APP=app4 PORT=4004 run
+```
+
 ## How to test it with CURL
 ### Buyers
 ` curl -d 'name=usertest&ip=10.0.0.1&tags=[decoracion, iluminacion]' -X POST http://localhost:4000/api/buyers `
