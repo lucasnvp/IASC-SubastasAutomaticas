@@ -3,10 +3,11 @@ defmodule SubastasAppWeb.BuyerController do
   alias SubastasAppWeb.BuyerModel
   alias SubastasAppWeb.OfferModel
 
-  def create(conn, %{"name" => name, "ip" => ip, "tags" => tags}) do
+  def create(conn, %{"name" => name, "ip" => ip, "tags" => tags_str}) do
     id = UUID.uuid4()
-    tags_list = String.split(", ")
-    SubastasApp.HordeSupervisor.add_buyer(id, name, ip, tags_list)
+    tags = String.split(tags_str, ", ")
+    IO.inspect tags
+    SubastasApp.HordeSupervisor.add_buyer(id, name, ip, tags)
 
     conn
     |> put_status(200)

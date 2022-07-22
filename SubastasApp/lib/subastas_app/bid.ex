@@ -93,5 +93,4 @@ defmodule SubastasApp.Bid do
     Horde.Registry.unregister(SubastasApp.HordeRegistry, bid.id)
     {:noreply, bid}
   end
-
 end

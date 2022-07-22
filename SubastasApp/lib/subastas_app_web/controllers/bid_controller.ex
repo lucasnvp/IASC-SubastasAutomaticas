@@ -1,10 +1,11 @@
 defmodule SubastasAppWeb.BidController do
   use SubastasAppWeb, :controller
 
-  def create(conn, %{"tags" => tags, "defaultPrice" => defaultPrice, "duration" => duration, "item" => item}) do
+  def create(conn, %{"tags" => tags_str, "defaultPrice" => defaultPrice, "duration" => duration, "item" => item}) do
     id = UUID.uuid4()
-    tags_list = String.split(", ")
-    SubastasApp.HordeSupervisor.add_bid(id, defaultPrice, duration, tags_list, item)
+    tags = String.split(tags_str, ", ")
+    IO.inspect tags
+    SubastasApp.HordeSupervisor.add_bid(id, defaultPrice, duration, tags, item)
 
     conn
     |> put_status(200)
