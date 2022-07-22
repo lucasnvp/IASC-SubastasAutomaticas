@@ -12,7 +12,6 @@ defmodule SubastasApp.Bid do
   end
 
   def init({id, defaultPrice, duration, tags, item}) do
-    Process.send_after(self(), :end_bid, Integer.parse(duration)*60000)
     Horde.Registry.register(SubastasApp.HordeRegistry, id, {id, defaultPrice, duration, tags, item})
     IO.puts "Bid #{item} - init"
 
@@ -44,6 +43,7 @@ defmodule SubastasApp.Bid do
     IO.inspect notifier, label: "Notifier about to notify new bid: "
     GenServer.cast(notifier, {:new_bid, bid})
 
+    Process.send_after(self(), :end_bid, Integer.parse(duration)*60000)
     {:ok, %{:id => id, :tags => tags, :defaultPrice => defaultPrice, :duration => duration, :item => item}}
   end
 
