@@ -1,4 +1,4 @@
-FROM elixir:1.12.2
+FROM elixir:1.12
 
 # Installation of the inotify-tools
 RUN apt-get update && apt-get install -y \
@@ -8,11 +8,11 @@ RUN apt-get update && apt-get install -y \
 # Set up the app
 WORKDIR subastas
 
-COPY SubastasApp /subastas/
-
 # Install hex & rebar
 RUN mix local.hex --force
 RUN mix local.rebar --force
+
+COPY SubastasApp /subastas/
 
 RUN mix deps.get
 RUN mix compile

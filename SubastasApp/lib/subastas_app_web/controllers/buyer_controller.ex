@@ -1,46 +1,64 @@
 defmodule SubastasAppWeb.BuyerController do
   use SubastasAppWeb, :controller
-  alias SubastasAppWeb.Buyer
-  alias SubastasAppWeb.Bid
+  alias SubastasAppWeb.BuyerModel
+  alias SubastasAppWeb.OfferModel
 
   def create(conn, %{"name" => name, "ip" => ip, "tags" => tags}) do
-    IO.puts "Buyer #{name} - init"
-
-    # Write a record
-    operation = fn ->
-      Memento.Query.write(%Buyer{name: name, ip: ip, tags: tags})
-    end
-    Memento.Transaction.execute_sync(operation, 5)
+    id = UUID.uuid4()
+    tags_list = String.split(", ")
+    SubastasApp.HordeSupervisor.add_buyer(id, name, ip, tags_list)
 
     conn
     |> put_status(200)
     |> text("Comprador registrado")
   end
 
-  def bid(conn, %{"id" => id, "price" => price}) do
-    IO.puts "Oferta realizada"
-    IO.puts "Id: #{id} - Price: #{price}"
+  def offer(conn, %{"userId" => user_id, "bidId" => bid_id, "price" => price}) do
+    offer = %{
+      user_id: user_id,
+      bid_id: bid_id,
+      price: price,
+      ts: :calendar.universal_time()
+    }
 
-    bids = Memento.transaction! fn ->
-      Memento.Query.all(Bid)
+    buyer_pids = Horde.Registry.lookup(SubastasApp.HordeRegistry, user_id)
+    IO.inspect buyer_pids, label: "Buyer pid is"
+
+    bid_pids = Horde.Registry.lookup(SubastasApp.HordeRegistry, bid_id)
+    IO.inspect bid_pids, label: "Bid pid is"
+
+    if(bid_pids !== []) do
+      if(buyer_pids !== []) do
+
+        # Check price
+        bid_price = bid_pids |> Enum.at(0) |> elem(1) |> elem(1)
+        if (bid_price < offer.price) do
+          bid_pid = bid_pids |> Enum.at(0) |> elem(0)
+          message = GenServer.call(bid_pid, {:new_offer, offer})
+          conn
+          |> put_status(200)
+          |> text(message)
+        else
+          conn
+          |> put_status(200)
+          |> text("Oferta invalida - low price")
+        end
+
+      else
+        conn
+          |> put_status(200)
+          |> text("Buyer not registered!")
+      end
+    else
+      conn
+        |> put_status(200)
+        |> text("Bid not registered!")
     end
-    IO.inspect bids, label: "The bids are"
-
-#    time = NaiveDateTime.utc_now
-    bid = Memento.transaction! fn ->
-#      Memento.Query.read(Bid, Integer.parse(id))
-      Memento.Query.read(Bid, id)
-    end
-    IO.puts "Bid: #{bid}"
-
-    conn
-    |> put_status(200)
-    |> text("Bid realizada")
   end
 
   def get_buyers(conn, %{}) do
     buyers = Memento.transaction! fn ->
-      Memento.Query.all(Buyer)
+      Memento.Query.all(BuyerModel)
     end
     IO.inspect buyers, label: "The buyers are"
 

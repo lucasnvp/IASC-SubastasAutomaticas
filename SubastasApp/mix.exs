@@ -19,7 +19,7 @@ defmodule SubastasApp.Mixfile do
   def application do
     [
       mod: {SubastasApp.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :crypto]
     ]
   end
 
@@ -42,6 +42,9 @@ defmodule SubastasApp.Mixfile do
       {:memento, "~> 0.3"},
       {:libcluster, "~> 3.0"},
       {:poison, "~> 5.0"},
+      {:httpoison, "~> 1.8"},
+      {:uuid, "~> 1.1" },
+      {:horde, "~> 0.8.7"},
     ]
   end
 end
