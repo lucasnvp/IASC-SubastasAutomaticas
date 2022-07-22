@@ -41,17 +41,10 @@ defmodule SubastasApp.BuyerNotifier do
       Memento.Query.select(OfferModel, {:==,:bid_id, bid.id})
     end
 
-    max_offer = Enum.max_by(offers, fn offer -> offer.price end)
+    offer = Enum.max_by(offers, fn offer -> offer.price end)
 
-    {max_offer_buyer, _} = Horde.Registry.lookup(SubastasApp.HordeRegistry, max_offer.user_id)
-		GenServer.cast(max_offer_buyer, {:bid_ending_won, bid})
-
-		other_buyers_offers = Enum.filter(offers, fn offer -> offer !== max_offer end)
-
-		Enum.each(other_buyers_offers, fn offer ->
-			{buyer_pid, _} = Horde.Registry.lookup(SubastasApp.HordeRegistry, offer.user_id)
-			GenServer.cast(buyer_pid, {:bid_ending_lost, bid})
-		end)
+		buyers = get_buyers()
+			Enum.each(buyers, fn buyer -> GenServer.cast(buyer.pid, {:bid_ending, offer, bid}) end)
 		{:noreply, state}
 	end
 

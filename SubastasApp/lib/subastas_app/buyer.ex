@@ -57,20 +57,18 @@ defmodule SubastasApp.Buyer do
     {:noreply, state}
   end
 
-  def handle_cast({:bid_ending_lost, bid}, state) do
-    IO.inspect state, label: "Buyer notifies bid ending to endpoint (LOST)"
-    IO.inspect bid, label: "Bid"
-    # url = "http://localhost:4000/api/#{state[:id]}/new_bid"
-    # HTTPoison.post url, "New bid #{bid.id}"
-    {:noreply, state}
-  end
-
-  def handle_cast({:bid_ending_won, bid}, state) do
-    IO.inspect state, label: "Buyer notifies bid ending to endpoint (WIN)"
-    IO.inspect bid, label: "Bid"
-    # url = "http://localhost:4000/api/#{state[:id]}/new_bid"
-    # HTTPoison.post url, "New bid #{bid.id}"
-    {:noreply, state}
+  def handle_cast({:bid_ending, offer, bid}, buyer) do
+    run_if_is_interesting(buyer,bid,
+      fn ->
+        IO.inspect bid, label: "Bid"
+        if (buyer.id == offer.user_id) do
+          IO.puts "The bid end, you are the win"
+        else
+          IO.puts "The bid end, you lose"
+        end
+      end
+    )
+    {:noreply, buyer}
   end
 
   # Private functions

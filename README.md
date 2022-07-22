@@ -41,7 +41,7 @@ make APP=app4 PORT=4004 run
 
 `SubastasAppWeb.BidController.create(conn, %{"tags" => ["casa", "iluminacion"], "defaultPrice" => "10", "duration" => "1", "item" => "lampara"})`
 
-`SubastasAppWeb.BuyerController.offer(conn, %{"userId" => "bfcdcf5b-f7ff-4aed-bf75-11a3c7d36974", "bidId" => "9c4e751c-7b2d-44e4-afa3-05c26fb674df", "price" => "20"})`
+`SubastasAppWeb.BuyerController.offer(conn, %{"userId" => "e3fd346f-c980-4100-bb5c-f4cc3d56755d", "bidId" => "4c389489-f788-49ee-8921-53f9132561a6", "price" => "20"})`
 
 # Get bid id for offers post
 `alias SubastasAppWeb.BuyerModel`
