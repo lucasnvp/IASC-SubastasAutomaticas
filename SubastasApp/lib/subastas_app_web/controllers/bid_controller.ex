@@ -4,7 +4,6 @@ defmodule SubastasAppWeb.BidController do
   def create(conn, %{"tags" => tags_str, "defaultPrice" => defaultPrice, "duration" => duration, "item" => item}) do
     id = UUID.uuid4()
     tags = String.split(tags_str, ", ")
-    IO.inspect tags
     SubastasApp.HordeSupervisor.add_bid(id, defaultPrice, duration, tags, item)
 
     conn

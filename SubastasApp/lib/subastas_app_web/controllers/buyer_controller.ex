@@ -6,7 +6,6 @@ defmodule SubastasAppWeb.BuyerController do
   def create(conn, %{"name" => name, "ip" => ip, "tags" => tags_str}) do
     id = UUID.uuid4()
     tags = String.split(tags_str, ", ")
-    IO.inspect tags
     SubastasApp.HordeSupervisor.add_buyer(id, name, ip, tags)
 
     conn
